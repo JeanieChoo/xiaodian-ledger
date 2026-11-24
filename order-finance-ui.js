@@ -28,7 +28,6 @@ async function deleteLedgerEntries(ids,fromDialog=false){
  const previous=state.entries.slice();setEntrySaving(true);try{state.entries=state.entries.filter(e=>!idSet.has(e.id));if(!await persist()){state.entries=previous;toast('删除未保存，请检查云端同步状态。');return;}lastDeletedRecord=structuredClone(records);selectedLedgerIds.clear();ledgerSelectionMode=false;render();$('#deleted-record-notice').querySelector('span').textContent='已删除 '+records.length+' 笔记录，总览和库存已更新。';$('#deleted-record-notice').hidden=false;entrySaving=false;if(fromDialog)closeEntry();toast('已删除 '+records.length+' 笔，可撤销本次删除。');}finally{setEntrySaving(false);}
 }
 function installOrderFinance(){
- installLedgerScroll();
  $('#ledger-expand').onclick=()=>{const focused=document.body.classList.toggle('ledger-focused');$('#ledger-expand').textContent=focused?'恢复布局':'展开表格';$('#ledger-expand').setAttribute('aria-pressed',String(focused));$('#ledger').scrollIntoView({block:'start'});};
  const f=$('#entry-form').elements;f.fulfillment.onchange=()=>{f.aaStatus.value='未AA';saleFields();};f.purchaseId.onchange=fillLinkedPurchase;f.qty.addEventListener('change',fillLinkedPurchase);
  f.relatedEntryId.onchange=()=>{const original=state.entries.find(e=>e.id===f.relatedEntryId.value);if(original)f.order.value=original.order||'';};
@@ -36,10 +35,3 @@ function installOrderFinance(){
  $('#undo-record-delete').onclick=async()=>{if(!lastDeletedRecord)return;const records=Array.isArray(lastDeletedRecord)?lastDeletedRecord:[lastDeletedRecord],previous=state.entries.slice(),button=$('#undo-record-delete');if(records.some(r=>state.entries.some(e=>e.id===r.id))){toast('有记录已恢复，请刷新核对。');return;}button.disabled=true;try{state.entries.unshift(...records);if(!await persist()){state.entries=previous;return;}lastDeletedRecord=null;$('#deleted-record-notice').hidden=true;render();returnToLedger(records[0].id);toast('已撤销本次 '+records.length+' 笔删除。');}finally{button.disabled=false;}};
 }
 
-function installLedgerScroll(){
- const table=$('#ledger-table'),range=$('#ledger-scroll-position'),bar=$('#ledger-horizontal-control');
- const sync=()=>{const max=table.scrollWidth-table.clientWidth;bar.hidden=max<=1;if(max>0)range.value=String(Math.round(table.scrollLeft/max*1000));$('#ledger-scroll-left').disabled=table.scrollLeft<=1;$('#ledger-scroll-right').disabled=table.scrollLeft>=max-1;};
- range.addEventListener('input',()=>{table.scrollLeft=(table.scrollWidth-table.clientWidth)*Number(range.value)/1000;sync();});
- $('#ledger-scroll-left').onclick=()=>table.scrollBy({left:-Math.max(150,table.clientWidth*.6),behavior:'smooth'});$('#ledger-scroll-right').onclick=()=>table.scrollBy({left:Math.max(150,table.clientWidth*.6),behavior:'smooth'});
- table.addEventListener('scroll',sync,{passive:true});new ResizeObserver(sync).observe(table);new MutationObserver(sync).observe(table,{childList:true,subtree:true});sync();
-}
