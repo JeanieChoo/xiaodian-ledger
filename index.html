@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#6354c7">
 <title>小店合记 · 手动记账版</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261124-2200">
 </head>
 <body>
 <aside class="sidebar">
@@ -27,7 +27,7 @@
  <section id="overview" class="view">
  <div class="section-caption"><h2>经营概况</h2><span>全部记录 · 人民币</span></div>
  <div class="metrics">
- <article class="metric"><div>销售净收入<span class="metric-mark mint">收</span></div><strong id="income">¥0.00</strong><small>销售实收扣除退款</small></article>
+ <article class="metric"><div>销售净收入<span class="metric-mark mint">收</span></div><strong id="income">¥0.00</strong><small id="income-detail">其中预收入 ¥0.00（未签收）</small></article>
  <article class="metric"><div>进货支出<span class="metric-mark lilac">货</span></div><strong id="purchase">¥0.00</strong><small>采购金额扣除采购退款</small></article>
  <article class="metric"><div>经营利润<span class="metric-mark peach-bg">利</span></div><strong id="profit">¥0.00</strong><small id="profit-note">净收入 − 已售成本 − 运费等费用</small></article>
  <article class="metric"><div>退货金额<span class="metric-mark peach-bg">退</span></div><strong id="refund-total">¥0.00</strong><small id="refund-detail">已实际退款，含进货与销售，不含运费赔付</small></article>
@@ -63,14 +63,14 @@
 <div class="dialog-footer"><span class="muted tiny">再次导入同一份表，不会重复记账。</span><button type="button" class="button" id="cancel-import">取消</button><button type="button" class="button primary" id="commit-import" disabled>确认导入</button></div></dialog>
 <dialog id="cloud-gate" aria-labelledby="cloud-title"><div class="cloud-gate-body"><div class="eyebrow">ROCCOPET · 共享账本</div><h2 id="cloud-title">打开链接，一起记账。</h2><p id="cloud-error" role="status" aria-live="polite">正在连接共享账本…</p><button class="button primary" id="cloud-retry" type="button">重新连接</button><p class="muted tiny">无需注册、验证码或口令。完整的专属链接就是进入凭证，请只发给合伙人。</p></div></dialog>
 <dialog id="delete-confirm-dialog" aria-labelledby="delete-confirm-title"><div class="cloud-gate-body"><h2 id="delete-confirm-title">删除这笔记录？</h2><p id="delete-confirm-name"></p><p>总览、库存和利润会重新计算。单独登记的退货运费会保留，删除后可撤销。</p><div class="actions"><button id="cancel-record-delete" type="button" class="button" autofocus>取消</button><button id="confirm-record-delete" type="button" class="button primary">确认删除</button></div></div></dialog>
-<script src="cloud-config.js"></script>
-<script src="cloud-core.js"></script>
-<script src="cloud.js"></script>
-<script src="xlsx.full.min.js"></script>
-<script src="order-import-core.js"></script>
-<script src="order-batch-core.js"></script>
-<script src="attachments.js"></script>
-<script src="order-finance-ui.js"></script>
-<script src="app.js"></script>
-<script src="order-import-ui.js"></script>
+<script src="cloud-config.js?v=20261124-2200"></script>
+<script src="cloud-core.js?v=20261124-2200"></script>
+<script src="cloud.js?v=20261124-2200"></script>
+<script src="xlsx.full.min.js?v=20261124-2200"></script>
+<script src="order-import-core.js?v=20261124-2200"></script>
+<script src="order-batch-core.js?v=20261124-2200"></script>
+<script src="attachments.js?v=20261124-2200"></script>
+<script src="order-finance-ui.js?v=20261124-2200"></script>
+<script src="app.js?v=20261124-2200"></script>
+<script src="order-import-ui.js?v=20261124-2200"></script>
 </body></html>
