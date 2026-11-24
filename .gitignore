@@ -1,0 +1,4 @@
+.private*
+*.xlsx
+*.csv
+preview-*
