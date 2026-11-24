@@ -40,6 +40,8 @@
     q('.shop small').textContent='两人共享 · 云端账本';q('.sidebar-bottom p').textContent='同一链接，共用一本账';q('#reset').hidden=true;
     q('.demo-note span:last-child').textContent='共享账本：保存后同步到另一台设备。专属链接是进入凭证，请只发给合伙人。';
     q('#entry-dialog .dialog-footer .muted').textContent='保存到共享账本';
+    q('#attachment-help').textContent='支持 JPG、PNG、WebP，每张最多 10 MB，最多 5 张。保存后截图同步到共享账本，两个人都能查看；不随 CSV 导出。';
+    q('footer span:last-child').textContent='ROCCOPET · 共享账本';
     q('#cloud-bar').hidden=false;
     const incoming=initialKey;
     try{accessKey=incoming||localStorage.getItem(keyName)||'';}catch{accessKey=incoming||'';}
