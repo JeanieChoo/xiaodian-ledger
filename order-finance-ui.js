@@ -29,6 +29,7 @@ async function deleteLedgerEntries(ids,fromDialog=false){
 }
 function installOrderFinance(){
  installLedgerScroll();
+ $('#ledger-expand').onclick=()=>{const focused=document.body.classList.toggle('ledger-focused');$('#ledger-expand').textContent=focused?'恢复布局':'展开表格';$('#ledger-expand').setAttribute('aria-pressed',String(focused));$('#ledger').scrollIntoView({block:'start'});};
  const f=$('#entry-form').elements;f.fulfillment.onchange=()=>{f.aaStatus.value='未AA';saleFields();};f.purchaseId.onchange=fillLinkedPurchase;f.qty.addEventListener('change',fillLinkedPurchase);
  f.relatedEntryId.onchange=()=>{const original=state.entries.find(e=>e.id===f.relatedEntryId.value);if(original)f.order.value=original.order||'';};
  $('#bulk-delete').onclick=()=>{if(!ledgerSelectionMode){ledgerSelectionMode=true;selectedLedgerIds.clear();renderLedger();return;}if(!selectedLedgerIds.size){toast('请先勾选要删除的记录。');return;}deleteLedgerEntries([...selectedLedgerIds]);};$('#exit-bulk-mode').onclick=()=>{ledgerSelectionMode=false;selectedLedgerIds.clear();renderLedger();};$('#select-filtered-entries').onclick=()=>{for(const e of filteredLedgerEntries())selectedLedgerIds.add(e.id);renderLedgerSelection();};$('#clear-selected-entries').onclick=()=>{selectedLedgerIds.clear();renderLedgerSelection();};
