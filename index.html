@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#6354c7">
 <title>小店合记 · 手动记账版</title>
-<link rel="stylesheet" href="style.css?v=20261124-frozen-returns-v2">
+<link rel="stylesheet" href="style.css?v=20261124-state-colors">
 </head>
 <body>
 <aside class="sidebar">
@@ -63,14 +63,14 @@
 <div class="dialog-footer"><span class="muted tiny">再次导入同一份表，不会重复记账。</span><button type="button" class="button" id="cancel-import">取消</button><button type="button" class="button primary" id="commit-import" disabled>确认导入</button></div></dialog>
 <dialog id="cloud-gate" aria-labelledby="cloud-title"><div class="cloud-gate-body"><div class="eyebrow">ROCCOPET · 共享账本</div><h2 id="cloud-title">打开链接，一起记账。</h2><p id="cloud-error" role="status" aria-live="polite">正在连接共享账本…</p><button class="button primary" id="cloud-retry" type="button">重新连接</button><p class="muted tiny">无需注册、验证码或口令。完整的专属链接就是进入凭证，请只发给合伙人。</p></div></dialog>
 <dialog id="delete-confirm-dialog" aria-labelledby="delete-confirm-title"><div class="cloud-gate-body"><h2 id="delete-confirm-title">删除这笔记录？</h2><p id="delete-confirm-name"></p><p id="delete-confirm-description">总览、库存和利润会重新计算。单独登记的退货运费会保留，删除后可撤销。</p><div class="actions"><button id="cancel-record-delete" type="button" class="button" autofocus>取消</button><button id="confirm-record-delete" type="button" class="button primary">确认删除</button></div></div></dialog>
-<script src="cloud-config.js?v=20261124-frozen-returns-v2"></script>
-<script src="cloud-core.js?v=20261124-frozen-returns-v2"></script>
-<script src="cloud.js?v=20261124-frozen-returns-v2"></script>
-<script src="xlsx.full.min.js?v=20261124-frozen-returns-v2"></script>
-<script src="order-import-core.js?v=20261124-frozen-returns-v2"></script>
-<script src="order-batch-core.js?v=20261124-frozen-returns-v2"></script>
-<script src="attachments.js?v=20261124-frozen-returns-v2"></script>
-<script src="order-finance-ui.js?v=20261124-frozen-returns-v2"></script>
-<script src="app.js?v=20261124-frozen-returns-v2"></script>
-<script src="order-import-ui.js?v=20261124-frozen-returns-v2"></script>
+<script src="cloud-config.js?v=20261124-state-colors"></script>
+<script src="cloud-core.js?v=20261124-state-colors"></script>
+<script src="cloud.js?v=20261124-state-colors"></script>
+<script src="xlsx.full.min.js?v=20261124-state-colors"></script>
+<script src="order-import-core.js?v=20261124-state-colors"></script>
+<script src="order-batch-core.js?v=20261124-state-colors"></script>
+<script src="attachments.js?v=20261124-state-colors"></script>
+<script src="order-finance-ui.js?v=20261124-state-colors"></script>
+<script src="app.js?v=20261124-state-colors"></script>
+<script src="order-import-ui.js?v=20261124-state-colors"></script>
 </body></html>

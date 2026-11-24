@@ -69,3 +69,16 @@ body.ledger-focused .sidebar,body.ledger-focused .topbar,body.ledger-focused .pa
 .inline-select.return-order,.badge.return-order,.metric-mark.return-mark{background:#fce7f0;color:#963052;border-color:#efbad0}.inline-select.return-order:hover{border-color:#d98bab}
 
 #ledger-table{max-height:min(70dvh,720px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}#ledger-table thead th{position:sticky;top:0;z-index:2;background:#fafafd;box-shadow:inset 0 -1px #e5e1ed}body.ledger-focused #ledger-table{max-height:calc(100dvh - 120px)}@media(max-width:650px){#ledger-table{max-height:calc(100dvh - 210px)}}
+
+.inline-select.status-pending,.inline-select option.status-pending,.aa-not-needed.status-pending{background:#faf2df;color:#876122;border-color:#e9d5a6}
+.inline-select.status-shipped,.inline-select option.status-shipped,.aa-not-needed.status-shipped{background:#e6efff;color:#315da8;border-color:#bfd0f1}
+.inline-select.status-signed,.inline-select option.status-signed,.aa-not-needed.status-signed{background:#e8f5eb;color:#2d7347;border-color:#bdddca}
+.inline-select.status-returning,.inline-select option.status-returning,.aa-not-needed.status-returning{background:#fce7f0;color:#963052;border-color:#efbad0}
+.inline-select.status-refunded,.inline-select option.status-refunded,.aa-not-needed.status-refunded{background:#eee5fa;color:#70479a;border-color:#d6c1ed}
+.inline-select.owner-wallet,.inline-select option.owner-wallet,.aa-not-needed.owner-wallet{background:#e6f2fa;color:#306a8d;border-color:#bcd7e8}
+.inline-select.owner-hu,.inline-select option.owner-hu,.aa-not-needed.owner-hu{background:#fbeedc;color:#8a5a24;border-color:#ead0aa}
+.inline-select.owner-qiu,.inline-select option.owner-qiu,.aa-not-needed.owner-qiu{background:#eee7fb;color:#715098;border-color:#d8c8ed}
+.inline-select.aa-unpaid,.inline-select option.aa-unpaid,.aa-not-needed.aa-unpaid{background:#fff0d9;color:#8a5d17;border-color:#ead0a1}
+.inline-select.aa-paid,.inline-select option.aa-paid,.aa-not-needed.aa-paid{background:#e5f5ed;color:#28704e;border-color:#b9ddc9}
+.inline-select.aa-none,.inline-select option.aa-none,.aa-not-needed.aa-none{background:#eef0f3;color:#59616e;border-color:#d4d9e0}
+#ledger-table .aa-not-needed{display:flex;align-items:center;justify-content:center;min-height:30px;width:100%;padding:3px 2px;border:1px solid #d4d9e0;border-radius:5px;font-size:11px;white-space:nowrap}

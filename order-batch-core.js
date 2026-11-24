@@ -62,6 +62,8 @@
     sources.set(key,{entry:candidate,platform:candidate.platform,rootId:prior?.rootId||manualRoot});importedKeys.add(key);
    }
   }
+  const cancelledSources=[...sources].filter(([,v])=>v.platform==='小红书'&&(v.entry.cancelled||roots.get(v.rootId)?.cancelled)),cancelledRootIds=new Set(existing.filter(e=>e.cancelled).map(e=>e.id));for(const [key,src] of cancelledSources){sources.delete(key);if(src.rootId)cancelledRootIds.add(src.rootId);}
+  const cancelledSkipped=cancelledSources.length+existing.filter(e=>e.cancelled&&!unwrap(e).length).length;
   const protectedPurchaseIds=new Set(existing.filter(e=>e.purchaseId).map(e=>e.purchaseId));
   const sales=[...sources].filter(([,v])=>v.platform==='小红书'),purchases=[...sources].filter(([,v])=>v.platform!=='小红书'),pairs=new Map(),claimed=new Set(),suggestions=[];
   // Already confirmed links stay stable across later exports.
@@ -76,7 +78,7 @@
   }
   const groups=[];for(const [sk,s] of sales){const pair=[...pairs].find(([,v])=>v===sk);groups.push({s,p:pair?sources.get(pair[0]):null,keys:pair?[sk,pair[0]]:[sk]});}
   for(const [pk,p] of purchases)if(!pairs.has(pk))groups.push({s:null,p,keys:[pk]});
-  const usedRoots=new Set(),entries=manual.filter(e=>![...sources.values()].some(s=>s.rootId===e.id)).map(copy),items=[],removed=[];
+  const usedRoots=new Set(),entries=manual.filter(e=>!e.cancelled&&![...sources.values()].some(s=>s.rootId===e.id)).map(copy),items=[],removed=[...cancelledRootIds].filter(id=>![...sources.values()].some(v=>v.rootId===id));
   for(const group of groups){const {s,p,keys}=group,preferred=(s?.rootId&&roots.get(s.rootId))||(p?.rootId&&roots.get(p.rootId)),purchaseSource=p?copy(p.entry):null,purchaseRoot=p?.rootId&&roots.get(p.rootId);
    if(s&&purchaseRoot&&!purchaseRoot.orderSources?.['小红书'])for(const k of ['amount','refund','payer','aaStatus','aaPayer','aaAmount','fees','attachments','note','shippingTracking'])if(purchaseRoot[k]!==undefined)purchaseSource[k]=copy(purchaseRoot[k]);
    const baseline=derived(s?.entry,purchaseSource);
@@ -88,6 +90,7 @@
    // Preserve manually entered cost, fees, refund, notes, AA and screenshots on first adoption too.
    if(preferred&&!preferred.orderDerived){for(const k of ['cost','fees','returnShipping','note','attachments'])if(k!=='attachments'&&preferred[k]!==undefined&&preferred[k]!==null&&preferred[k]!==''&&(!Array.isArray(preferred[k])||preferred[k].length))candidate[k]=copy(preferred[k]);}
    if(s&&purchaseRoot&&!purchaseRoot.orderSources?.['小红书'])for(const k of ['payer','aaStatus','aaPayer','aaAmount'])if(purchaseSource[k]!==undefined)candidate[k]=copy(purchaseSource[k]);
+   if(!s&&p&&cancelledRootIds.has(id)){candidate.cancelled=false;candidate.reviewPending=Boolean(p.entry.reviewPending);candidate.type=p.entry.type;candidate.amount=p.entry.amount;candidate.refund=p.entry.refund||0;candidate.date=p.entry.date;candidate.status=p.entry.status;}
    candidate.orderSources={};if(s)candidate.orderSources['小红书']=copy(s.entry);if(p)candidate.orderSources['1688']=copy(purchaseSource);
    candidate.orderDerived=copy(baseline);delete candidate.orderDerived.id;delete candidate.orderDerived.orderSources;delete candidate.orderDerived.orderDerived;
    candidate.importData=copy((s||p).entry.importData);
@@ -97,7 +100,7 @@
   }
   for(const id of removed){const source=[...sources.values()].find(v=>v.rootId===id),target=source&&entries.find(e=>Object.values(e.orderSources||{}).some(v=>v.importData?.key===source.entry.importData.key));if(target)for(const entry of entries)if(entry.relatedEntryId===id)entry.relatedEntryId=target.id;}
   const relevant=items.filter(i=>i.keys.some(k=>importedKeys.has(k))||i.action!=='skip');
-  return {entries,items:relevant,removed,issues,suggestions,sourceItems,counts:{create:items.filter(i=>i.action==='create').length,update:items.filter(i=>i.action==='update').length,skip:relevant.filter(i=>i.action==='skip').length,blocked:blockedKeys.size+issues.length,linked:relevant.filter(i=>i.linked).length},files:batches.map(b=>({name:b.name,platform:b.parsed.platform,orders:b.parsed.orders.length,lines:b.parsed.entries.length,total:b.parsed.totalCents/100}))};
+  return {entries,items:relevant,removed,issues,cancelledSkipped,suggestions,sourceItems,counts:{create:items.filter(i=>i.action==='create').length,update:items.filter(i=>i.action==='update').length,skip:relevant.filter(i=>i.action==='skip').length,blocked:blockedKeys.size+issues.length,linked:relevant.filter(i=>i.linked).length},files:batches.map(b=>({name:b.name,platform:b.parsed.platform,orders:b.parsed.orders.length,lines:b.parsed.entries.length,total:b.parsed.totalCents/100}))};
  }
  const api={createBatchPlan,matchReason,derived,unwrap};if(typeof module==='object'&&module.exports)module.exports=api;else root.OrderBatchCore=api;
 })(typeof globalThis==='object'?globalThis:this);
