@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#6354c7">
 <title>小店合记 · 手动记账版</title>
-<link rel="stylesheet" href="style.css?v=20261124-2200">
+<link rel="stylesheet" href="style.css?v=20261124-smart-match">
 </head>
 <body>
 <aside class="sidebar">
@@ -54,7 +54,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <dialog id="screenshot-dialog" aria-labelledby="screenshot-title"><div class="dialog-heading"><h2 id="screenshot-title">订单截图</h2><button type="button" id="close-screenshot" class="close" aria-label="关闭截图预览">×</button></div><div class="screenshot-body"><img id="screenshot-full" alt="订单截图大图"></div></dialog>
 <dialog id="import-dialog" aria-labelledby="import-title"><div class="dialog-heading"><div><div class="eyebrow">订单表导入</div><h2 id="import-title">新单新增，旧单更新，重复跳过。</h2></div><button type="button" class="close" id="close-import" aria-label="关闭订单导入">×</button></div>
-<div class="import-content"><p class="form-note">支持同时拖入小红书和1688订单表，自动识别来源。按各平台订单号＋规格查重；可靠的代发订单自动关联，无法唯一匹配时由你选择。日期以顾客下单日为准，手动填写的费用和截图会保留。</p>
+<div class="import-content"><p class="form-note">支持同时拖入小红书和1688订单表，自动识别来源。按各平台订单号＋规格查重；可靠的代发订单自动关联，脱敏的收件人和地区会结合规格及日期自动匹配，无法唯一确认时先保留独立记录。日期以顾客下单日为准，手动填写的费用和截图会保留。</p>
 <div class="import-controls"><label>1688默认业务<select id="import-kind"><option>进货</option></select></label><label>新记录默认归属<select id="import-payer"><option>小荷包</option><option>胡老板</option><option>秋老板</option></select></label><label id="import-sheet-label" hidden>工作表<select id="import-sheet"></select></label></div>
 <label class="import-check"><input type="checkbox" id="import-receiver"> 收货人是顾客（销售或一件代发时勾选；采购自用收货地址不会混入顾客信息）</label>
 <div class="import-input-grid"><section class="import-file-box" id="import-drop-zone"><h3>把两份订单表一起拖到这里</h3><label for="import-file">Excel / CSV / TSV 文件</label><input id="import-file" type="file" multiple accept=".xlsx,.xls,.csv,.tsv"><p class="muted tiny">每次选择最新导出文件即可。原表在本机解析，确认后同步账目；订单原文件不会上传。</p><ul id="import-file-list" class="import-file-list"></ul></section><section class="import-paste-box"><label for="import-paste">或者，从 Excel 复制粘贴（包含表头）</label><textarea id="import-paste" rows="4" placeholder="从订单表中复制表头和数据，粘贴到这里"></textarea><button type="button" class="button" id="parse-paste">解析粘贴内容</button></section></div>
@@ -63,14 +63,14 @@
 <div class="dialog-footer"><span class="muted tiny">再次导入同一份表，不会重复记账。</span><button type="button" class="button" id="cancel-import">取消</button><button type="button" class="button primary" id="commit-import" disabled>确认导入</button></div></dialog>
 <dialog id="cloud-gate" aria-labelledby="cloud-title"><div class="cloud-gate-body"><div class="eyebrow">ROCCOPET · 共享账本</div><h2 id="cloud-title">打开链接，一起记账。</h2><p id="cloud-error" role="status" aria-live="polite">正在连接共享账本…</p><button class="button primary" id="cloud-retry" type="button">重新连接</button><p class="muted tiny">无需注册、验证码或口令。完整的专属链接就是进入凭证，请只发给合伙人。</p></div></dialog>
 <dialog id="delete-confirm-dialog" aria-labelledby="delete-confirm-title"><div class="cloud-gate-body"><h2 id="delete-confirm-title">删除这笔记录？</h2><p id="delete-confirm-name"></p><p>总览、库存和利润会重新计算。单独登记的退货运费会保留，删除后可撤销。</p><div class="actions"><button id="cancel-record-delete" type="button" class="button" autofocus>取消</button><button id="confirm-record-delete" type="button" class="button primary">确认删除</button></div></div></dialog>
-<script src="cloud-config.js?v=20261124-2200"></script>
-<script src="cloud-core.js?v=20261124-2200"></script>
-<script src="cloud.js?v=20261124-2200"></script>
-<script src="xlsx.full.min.js?v=20261124-2200"></script>
-<script src="order-import-core.js?v=20261124-2200"></script>
-<script src="order-batch-core.js?v=20261124-2200"></script>
-<script src="attachments.js?v=20261124-2200"></script>
-<script src="order-finance-ui.js?v=20261124-2200"></script>
-<script src="app.js?v=20261124-2200"></script>
-<script src="order-import-ui.js?v=20261124-2200"></script>
+<script src="cloud-config.js?v=20261124-smart-match"></script>
+<script src="cloud-core.js?v=20261124-smart-match"></script>
+<script src="cloud.js?v=20261124-smart-match"></script>
+<script src="xlsx.full.min.js?v=20261124-smart-match"></script>
+<script src="order-import-core.js?v=20261124-smart-match"></script>
+<script src="order-batch-core.js?v=20261124-smart-match"></script>
+<script src="attachments.js?v=20261124-smart-match"></script>
+<script src="order-finance-ui.js?v=20261124-smart-match"></script>
+<script src="app.js?v=20261124-smart-match"></script>
+<script src="order-import-ui.js?v=20261124-smart-match"></script>
 </body></html>

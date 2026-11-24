@@ -11,6 +11,17 @@
   const a=norm(p.color),b=norm(s.color);if(a&&b&&!(a.includes(b)||b.includes(a)))return false;
   return true;
  }
+ function visibleNameMatches(a,b){
+  a=norm(a);b=norm(b);if(!a||!b)return false;
+  const pattern=(masked,full)=>{const chunks=masked.split(/[*＊•●]+/);if(chunks.length===1)return masked.length===1?full.startsWith(masked):masked===full;const start=chunks[0],end=chunks[chunks.length-1];return (start.length+end.length)>0&&full.startsWith(start)&&full.endsWith(end);};
+  return /[*＊•●]/.test(a)?pattern(a,b):/[*＊•●]/.test(b)?pattern(b,a):a===b||a.length===1&&b.startsWith(a)||b.length===1&&a.startsWith(b);
+ }
+ function regionMatches(full,masked){
+  const clean=String(masked||'').normalize('NFKC').split(/[*＊•●]/)[0].trim(),prefix=norm(clean);
+  if(!/[*＊•●]/.test(masked)||prefix.length<6)return false;
+  const regions=clean.match(/省|市|区|县|自治区|自治州/g)||[];
+  return regions.length>=2&&norm(full).startsWith(prefix);
+ }
  function matchReason(p,s){
   if(s.cancelled||s.reviewPending)return '';
   if(p.downstreamOrder&&p.downstreamOrder===s.order&&fit(p,s))return '下游订单号一致';
@@ -19,6 +30,8 @@
   const pp=phone(p.receiverPhone||p.customerPhone),sp=phone(s.customerPhone),pa=norm(p.receiverAddress||p.customerAddress),sa=norm(s.customerAddress),pn=norm(p.receiverName||p.customerName),sn=norm(s.customerName);
   if(pp&&pp===sp&&pa.length>=10&&pa===sa)return '电话、地址、规格数量一致';
   if(pn&&pn===sn&&!/[*＊]/.test(pn)&&pa.length>=10&&pa===sa)return '收件人、地址、规格数量一致';
+  const purchaseDate=Date.parse(p.date),saleDate=Date.parse(s.date);
+  if(purchaseDate>=saleDate&&days<=7&&p.size&&s.size&&p.color&&s.color&&visibleNameMatches(pn,sn)&&(regionMatches(p.receiverAddress||p.customerAddress,s.customerAddress)||regionMatches(s.customerAddress,p.receiverAddress||p.customerAddress)))return '收件人可见信息、收货地区、尺码颜色数量及日期一致（唯一对应）';
   return '';
  }
  function unwrap(entry){
@@ -75,7 +88,7 @@
    candidate.orderSources={};if(s)candidate.orderSources['小红书']=copy(s.entry);if(p)candidate.orderSources['1688']=copy(p.entry);
    candidate.orderDerived=copy(baseline);delete candidate.orderDerived.id;delete candidate.orderDerived.orderSources;delete candidate.orderDerived.orderDerived;
    candidate.importData=copy((s||p).entry.importData);
-   if(s&&p)warnings.push('已关联销售与采购，只记一笔收入和一笔成本');else if(s)warnings.push('尚未关联采购：保留销售，成本待补');
+   if(s&&p){warnings.push('已自动关联销售与采购，只记一笔收入和一笔成本');const reason=matchReason(p.entry,s.entry);if(reason)warnings.push('匹配依据：'+reason);}else if(s)warnings.push('尚未关联采购：保留销售，成本待补');
    const action=!preferred?'create':same(candidate,preferred)?'skip':'update';entries.push(candidate);items.push({action,candidate,currentId:preferred?.id,keys,warnings:[...new Set(warnings)],linked:!!(s&&p)});
    for(const src of [s,p])if(src?.rootId&&src.rootId!==id&&!removed.includes(src.rootId))removed.push(src.rootId);
   }
