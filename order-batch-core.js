@@ -23,7 +23,7 @@
   return regions.length>=2&&norm(full).startsWith(prefix);
  }
  function matchReason(p,s){
-  if(s.cancelled||s.reviewPending)return '';
+  if(s.cancelled)return '';
   if(p.downstreamOrder&&p.downstreamOrder===s.order&&fit(p,s))return '下游订单号一致';
   if(p.shippingTracking&&norm(p.shippingTracking)===norm(s.shippingTracking)&&fit(p,s))return '快递单号及规格数量一致';
   const days=Math.abs(Date.parse(p.date)-Date.parse(s.date))/86400000;if(!Number.isFinite(days)||days>21||!fit(p,s))return '';
@@ -77,7 +77,9 @@
   const groups=[];for(const [sk,s] of sales){const pair=[...pairs].find(([,v])=>v===sk);groups.push({s,p:pair?sources.get(pair[0]):null,keys:pair?[sk,pair[0]]:[sk]});}
   for(const [pk,p] of purchases)if(!pairs.has(pk))groups.push({s:null,p,keys:[pk]});
   const usedRoots=new Set(),entries=manual.filter(e=>![...sources.values()].some(s=>s.rootId===e.id)).map(copy),items=[],removed=[];
-  for(const group of groups){const {s,p,keys}=group,preferred=(s?.rootId&&roots.get(s.rootId))||(p?.rootId&&roots.get(p.rootId)),baseline=derived(s?.entry,p?.entry);
+  for(const group of groups){const {s,p,keys}=group,preferred=(s?.rootId&&roots.get(s.rootId))||(p?.rootId&&roots.get(p.rootId)),purchaseSource=p?copy(p.entry):null,purchaseRoot=p?.rootId&&roots.get(p.rootId);
+   if(s&&purchaseRoot&&!purchaseRoot.orderSources?.['小红书'])for(const k of ['amount','refund','payer','aaStatus','aaPayer','aaAmount','fees','attachments','note','shippingTracking'])if(purchaseRoot[k]!==undefined)purchaseSource[k]=copy(purchaseRoot[k]);
+   const baseline=derived(s?.entry,purchaseSource);
    let id=preferred?.id;if(!id)id=options.idForKey?options.idForKey(keys[0]):'import:'+keys[0];
    if(usedRoots.has(id))throw Error('来源订单关联冲突，已停止导入');usedRoots.add(id);
    const candidate={...baseline,id};delete candidate.orderSources;delete candidate.orderDerived;
@@ -85,7 +87,8 @@
    if(preferred?.orderDerived){for(const k of new Set([...Object.keys(preferred.orderDerived),...Object.keys(preferred)])){const value=preferred.orderDerived[k];if(['id','orderSources','orderDerived','importData','source'].includes(k))continue;if(!same(preferred[k],value)&&preferred[k]!==undefined){candidate[k]=copy(preferred[k]);if(!same(preferred[k],baseline[k]))warnings.push('保留手动填写：'+({cost:'进货成本',fees:'发货费用',note:'备注',attachments:'截图',aaStatus:'AA结算',aaPayer:'AA付款人',aaAmount:'AA金额',payer:'归属',status:'状态',date:'日期',refund:'顾客退款',returnShipping:'退货运费',shippingTracking:'快递单号',customerName:'顾客姓名',customerPhone:'顾客电话',customerAddress:'顾客地址'}[k]||'记录信息'));}}}
    // Preserve manually entered cost, fees, refund, notes, AA and screenshots on first adoption too.
    if(preferred&&!preferred.orderDerived){for(const k of ['cost','fees','returnShipping','note','attachments'])if(k!=='attachments'&&preferred[k]!==undefined&&preferred[k]!==null&&preferred[k]!==''&&(!Array.isArray(preferred[k])||preferred[k].length))candidate[k]=copy(preferred[k]);}
-   candidate.orderSources={};if(s)candidate.orderSources['小红书']=copy(s.entry);if(p)candidate.orderSources['1688']=copy(p.entry);
+   if(s&&purchaseRoot&&!purchaseRoot.orderSources?.['小红书'])for(const k of ['payer','aaStatus','aaPayer','aaAmount'])if(purchaseSource[k]!==undefined)candidate[k]=copy(purchaseSource[k]);
+   candidate.orderSources={};if(s)candidate.orderSources['小红书']=copy(s.entry);if(p)candidate.orderSources['1688']=copy(purchaseSource);
    candidate.orderDerived=copy(baseline);delete candidate.orderDerived.id;delete candidate.orderDerived.orderSources;delete candidate.orderDerived.orderDerived;
    candidate.importData=copy((s||p).entry.importData);
    if(s&&p){warnings.push('已自动关联销售与采购，只记一笔收入和一笔成本');const reason=matchReason(p.entry,s.entry);if(reason)warnings.push('匹配依据：'+reason);}else if(s)warnings.push('尚未关联采购：保留销售，成本待补');

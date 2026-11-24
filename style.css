@@ -65,3 +65,7 @@ body.ledger-focused .sidebar,body.ledger-focused .topbar,body.ledger-focused .pa
 @media(max-width:950px){#ledger-table .ledger-compact-table{min-width:960px}body.ledger-focused main{padding:8px}body.ledger-focused .sidebar{display:none}#ledger .actions .button{min-height:36px}}
 
 #ledger-table .ledger-date{font-size:11px}#ledger-table .order-total>small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#ledger-table td.number>span{white-space:normal;font-size:11px}
+
+.inline-select.return-order,.badge.return-order,.metric-mark.return-mark{background:#fce7f0;color:#963052;border-color:#efbad0}.inline-select.return-order:hover{border-color:#d98bab}
+
+#ledger-table{max-height:min(70dvh,720px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}#ledger-table thead th{position:sticky;top:0;z-index:2;background:#fafafd;box-shadow:inset 0 -1px #e5e1ed}body.ledger-focused #ledger-table{max-height:calc(100dvh - 120px)}@media(max-width:650px){#ledger-table{max-height:calc(100dvh - 210px)}}

@@ -51,7 +51,7 @@
    const date=dateValue(get(r,'订单创建时间'));if(!date)throw Error('缺少顾客下单日期');
    const cancelled=/已取消|已关闭/.test(text(get(r,'订单状态'))),after=text(get(r,'售后状态')),aftersale=!!after&&!/无售后|无$/.test(after),rawStatus=text(get(r,'订单状态'));
    let status=cancelled?'待发货':mapStatus(rawStatus,'销售');if(!status)throw Error('暂不支持小红书状态“'+rawStatus+'”');
-   const explicitRefund=money(get(r,'退款金额(元)')||get(r,'退款金额'));if(aftersale)status=explicitRefund!==null&&/完成/.test(after)?'已退回退款':'待退回';
+   const explicitRefund=money(get(r,'退款金额(元)')||get(r,'退款金额'));if(aftersale&&!cancelled)status=explicitRefund!==null&&/完成/.test(after)?'已退回退款':'待退回';
    const sizeMatch=spec.match(/(?:^|\s)([2-6]?XL|XXXL|XXL|XL|XS|S|M|L|均码)(?=\s|$)/i),size=sizeMatch?sizeMatch[1].toUpperCase():'',color=sizeMatch?spec.replace(sizeMatch[0],' ').trim():spec;
    const identity=sku?'sku:'+sku:'variant:'+stable([normal(name),normal(spec)]),key='xhs-order-v1:'+stable(['销售',order,identity]);
    const fields={type:'销售',platform:'小红书',date,order,name,size,color,qty,amount:amount/100,status,customerName:text(get(r,'收件人姓名')),customerPhone:text(get(r,'收件人电话')),customerAddress:text(get(r,'收件人地址')),shippingTracking:text(get(r,'快递单号')),cancelled,reviewPending:cancelled||(aftersale&&explicitRefund===null),aftersaleStatus:after,fulfillment:'按单采购'};
